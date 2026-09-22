@@ -141,13 +141,31 @@ impassable in snow, which can cut the town off for a day or two most winters.
      visible. Milestone 4. -->
 
 **Question:**
-
+What time do Kestrelford's pubs stop serving food in the evening?
 **Answer:**
 
 ```
+  (best distance 0.233, cutoff 0.65)
+
+Kestrelford's pubs serve from 6 to 8:30 in the evening. 
+
+Source: guide_eating.md
+
+Sources retrieved: guide_brightwater.md, guide_eating.md, guide_regional_transport.md
+
+0 model calls this session, 1 served from cache
 ```
 
 **My relevance cutoff:**
+
+`0.65`
+
+The five in-corpus questions had best distances of 0.3241, 0.2328, 0.3619,
+0.3278, and 0.4740 (range: 0.2328–0.4740). The five `OUT_OF_SCOPE` questions
+had best distances of 0.8445, 0.9124, 1.0343, 0.8448, and 0.8434 (range:
+0.8434–1.0343). I chose 0.65 because it is in the clear gap between the two
+groups: it accepts all five supported questions while refusing all five clear
+misses.
 
 <!-- The number you set in config.py, and how you got there.
 
@@ -160,7 +178,16 @@ impassable in snow, which can cut the town off for a day or two most winters.
 
 | Question | In corpus? | Best distance |
 |---|---|---|
-|  |  |  |
+| How many weekday buses run from Brightwater to Givens Mill, and how long does the trip take? | Yes | 0.3241 |
+| What time do Kestrelford's pubs stop serving food in the evening? | Yes | 0.2328 |
+| Which month is identified as the best week of the year in Brightwater? | Yes | 0.3619 |
+| How long is the walk from Elder Ness village to the lighthouse? | Yes | 0.3278 |
+| What accessibility limitation does the Givens Mill tour have? | Yes | 0.4740 |
+| What is the capital of Mongolia? | No | 0.8445 |
+| How do I change the oil in a diesel engine? | No | 0.9124 |
+| Who won the 1994 World Cup? | No | 1.0343 |
+| What is the recommended dosage of ibuprofen for a headache? | No | 0.8448 |
+| How do I write a for loop in Rust? | No | 0.8434 |
 
 ## How I Used AI
 
