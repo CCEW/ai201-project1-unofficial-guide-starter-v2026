@@ -23,8 +23,9 @@ For at least 4 of my 5 test questions, the retrieved chunks include one that
 contains the answer.
 
 **Why this target:**
-<!-- e.g. "One of my questions is about a topic only two documents mention, so
-     I expect that one to be hard." -->
+The five questions use facts stated directly in five different guides, so a
+useful retrieval system should find the evidence for most of them. I allow one
+miss because fixed-size chunks can split a question's wording from its answer.
 
 ---
 
@@ -33,8 +34,9 @@ contains the answer.
 Every answer the system produces names at least one source document.
 
 **Why this target:**
-<!-- Why all five and not four? What about your setup makes that achievable —
-     or what would have to go wrong for it not to be? -->
+The retrieval results retain each chunk's source filename, so attribution does
+not depend on the model guessing where a fact came from. Missing it on any
+answer would make that answer hard to verify.
 
 ---
 
@@ -50,28 +52,24 @@ in at least 4 of 5 tries.
      just keep five of them, or the "4 of 5" above has nothing to be 4 of. -->
 
 **Why this target:**
-<!-- What did your distances look like when you set the cutoff in Milestone 4?
-     Was there a clean gap, or did the two groups overlap? -->
+The five out-of-scope questions concern unrelated topics, so their closest
+matches should be much weaker than guides about this region. I allow one error
+until the distance measurements in Milestone 4 show where the two groups fall.
 
 ---
 
 ## 4. Something about your chunks
 
-<!-- YOU WRITE THIS ONE.
-
-     How would you know if your chunks were the right size? Name something
-     countable or observable.
-
-     Examples of the right shape — don't copy these, they should come from
-     what you actually saw in Milestone 3:
-       - "At least 4 of 5 sampled chunks read as a complete thought, with no
-          sentence cut in half at either end."
-       - "No chunk is shorter than 200 characters, since anything below that
-          in my corpus turned out to be a heading with no content under it." -->
-
-
+For the first chunk produced from each of `guide_givens_mill.md`,
+`guide_eating.md`, `guide_accessibility.md`, `guide_seasons.md`, and
+`guide_walking.md`, at least 4 of 5 end after a complete sentence rather than
+in the middle of one.
 
 **Why this target:**
+The guides use sentences to state practical facts such as times, distances, and
+restrictions. A chunk that ends mid-sentence can separate a fact from its
+qualifier, so I would be disappointed if this happened in more than one of five
+different guide types.
 
 
 
@@ -79,17 +77,14 @@ in at least 4 of 5 tries.
 
 ## 5. Your choice
 
-<!-- YOU WRITE THIS ONE TOO.
-
-     Pick something you actually care about getting right. It could be about
-     speed, about refusals, about a particular kind of question your corpus
-     handles badly, about source attribution being correct rather than merely
-     present — anything, as long as it names a number or an observable
-     outcome. -->
-
-
+In one `run_eval.py` evaluation run, answers to at least 4 of the 5 test
+questions contain that question's `expects` phrase, ignoring capitalization.
 
 **Why this target:**
+Each expected phrase is a factual detail written in the corpus, not a subjective
+recommendation. Requiring four matches tests whether the final answer preserves
+the key detail retrieved from the guides while leaving room for one generation
+or retrieval failure.
 
 
 
