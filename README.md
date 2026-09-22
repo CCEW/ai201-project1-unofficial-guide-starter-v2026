@@ -1,7 +1,6 @@
 # The Unofficial Guide
 
-<!-- Replace this line with your name and which corpus you picked. -->
-Camila Nino Francia - 
+Camila Nino Francia - city guides corpus
 
 > **This file is your submission.** Fill it in as you go — most sections get
 > written during the milestone that produces them, not at the end.
@@ -21,6 +20,15 @@ Camila Nino Francia -
 # Unit 1
 
 ## What This Does
+
+This project is a question-answering guide for the `city_guides` corpus, which
+contains practical information about Brightwater and nearby towns, villages,
+walking routes, transport, food, accessibility, and seasons. It splits the
+guides into searchable chunks, retrieves the closest chunks for a question, and
+uses only those chunks to produce a short answer that names its source file.
+When the closest evidence is too distant, the relevance gate refuses rather
+than guessing. It can answer factual questions such as Givens Mill bus times,
+Kestrelford pub hours, and the accessibility of a mill tour.
 
 <!-- Three or four sentences. Which corpus you picked, and the kinds of
      questions your system answers. Write it for someone who has never seen
@@ -200,9 +208,21 @@ misses.
 
      Milestone 5. -->
 
-**1.**
+**1.** I asked Codex to implement a paragraph-aware chunker for the long,
+headed city guides and to use a 700-character target with 150 characters of
+overlap. Its first revision closed a chunk before every heading; when I printed
+sample chunks, that produced 99 small chunks and separated headings from useful
+context. I asked it to revise the approach, and it changed the code to attach
+each heading to its following paragraph before combining sections. The result
+was 53 chunks with the sampled chunks retaining complete, answerable facts.
 
-**2.**
+**2.** I asked Codex to check whether my test questions and acceptance criteria
+could be evaluated by someone who did not know my intent. It replaced empty
+questions with five corpus-specific questions and exact `expects` phrases, then
+made the chunk criterion name five source files and a complete-sentence check.
+It also made the answer criterion a case-insensitive match against each
+question's `expects` phrase, so I can score the evaluation consistently rather
+than deciding whether an answer merely seems good.
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
