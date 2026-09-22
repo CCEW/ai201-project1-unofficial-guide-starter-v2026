@@ -30,8 +30,17 @@ Camila Nino Francia -
 
 ## Chunking Strategy
 
-**Chunk size:**
-**Overlap:**
+**Chunk size:** 700 characters (target)
+**Overlap:** 150 characters (target, using complete paragraphs)
+
+The `city_guides` corpus contains long, sectioned guides rather than short
+posts: the documents are roughly 1,500–2,500 characters long, and their
+practical facts are usually contained in paragraphs. I use paragraph-aware
+chunks with a 700-character target so a chunk can hold several related facts
+without becoming a whole guide. A 150-character overlap retains the previous
+short section when it fits, preserving context at a section boundary without
+repeating most of the next chunk. Paragraphs are never split; an unusually long
+paragraph is kept whole so a fact is not separated from its qualifier.
 
 <!-- What about YOUR documents made you pick these numbers? Short posts and
      long sectioned guides don't want the same chunking, and "800 seemed
@@ -54,29 +63,76 @@ Camila Nino Francia -
 
      Milestone 3. -->
 
-**Chunk 1** — source: `` — produced by: ``
+**Chunk 1** — source: `guide_givens_mill.md#0` — produced by: `chunker.py::split_documents`
 
 ```
+# Givens Mill
+
+Givens Mill is a village of 700 built around a working watermill that still grinds flour commercially. It is the sort of place people visit for an afternoon and then talk about for longer than the visit lasted.
+
+## Getting there
+
+No station and no bus on Sundays; four buses a day from Brightwater on weekdays, taking 30 minutes. Driving is 20 minutes. The village car park holds about forty cars and is full by 11am on summer Saturdays.
+
+## Getting around
+
+Everything is on one street along the river. The mill is at one end and the church at the other, eight minutes apart. The riverside path continues in both directions for as far as you want to walk.
 ```
 
-**Chunk 2** — source: `` — produced by: ``
+**Chunk 2** — source: `guide_regional_transport.md#1` — produced by: `chunker.py::split_documents`
 
 ```
+## Buses
+
+Three operators run in the region and they do not accept each other's tickets,
+which is the single most common source of confusion for visitors. Services
+concentrate on weekday daytimes. Sunday service is minimal to non-existent
+outside the Brightwater town routes.
+
+The Kestrelford service is hourly on weekdays, two-hourly on Saturdays, and
+does not run on Sundays. The Halden Bay coast service runs four times daily
+year-round.
 ```
 
-**Chunk 3** — source: `` — produced by: ``
+**Chunk 3** — source: `guide_eating.md#1` — produced by: `chunker.py::split_documents`
 
 ```
+## Opening hours
+
+This catches visitors out more than anything else. Outside Marchwood, kitchens
+across the region stop serving at 9pm and often earlier. Kestrelford's pubs
+serve 12 to 2 and 6 to 8:30 and there is nowhere to eat at all outside those
+windows. Elder Ness has one pub, closed Mondays.
+
+Sunday evening is the hardest meal to find anywhere except Marchwood and
+Thornby Wells.
 ```
 
-**Chunk 4** — source: `` — produced by: ``
+**Chunk 4** — source: `guide_accessibility.md#3` — produced by: `chunker.py::split_documents`
 
 ```
+## Practical
+
+The nearest full hospital is in Marchwood. Brightwater has a hospital;
+Kestrelford, Halden Bay, Corry Vale, Givens Mill and Elder Ness have minor
+injuries units with limited hours or nothing at all.
+
+Mobile coverage is good in the town centres and patchy on the outskirts, and
+genuinely absent in parts of Corry Vale.
 ```
 
-**Chunk 5** — source: `` — produced by: ``
+**Chunk 5** — source: `guide_walking.md#3` — produced by: `chunker.py::split_documents`
 
 ```
+## Seasonal notes
+
+Add four minutes to any Brightwater walking estimate in winter; the path past
+the pond ices over and people take the long way round. Boots with real tread
+matter more here than any other equipment. Paths are cleared by 7am on weekdays
+and considerably later at weekends.
+
+The Kestrelford approach road is not gritted above the second village and is
+impassable in snow, which can cut the town off for a day or two most winters.
 ```
 
 ## Sample Answer

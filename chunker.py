@@ -97,7 +97,77 @@ def split_documents(documents: list[Document]) -> list[Chunk]:
       - Would splitting on paragraph breaks keep more thoughts intact than
         splitting on a character count?
     """
-    return fallback_split(documents)
+    chunk_size = config.CHUNK_SIZE
+    overlap = config.CHUNK_OVERLAP
+    if chunk_size <= 0:
+        raise ValueError("chunk size must be positive")
+    if overlap < 0 or overlap >= chunk_size:
+        raise ValueError("overlap must be non-negative and smaller than chunk size")
+
+    def joined_length(parts: list[str]) -> int:
+        return len("\n\n".join(parts))
+
+    def trailing_overlap(parts: list[str]) -> list[str]:
+        """Keep trailing whole sections up to the configured overlap."""
+        kept: list[str] = []
+        for paragraph in reversed(parts):
+            candidate = [paragraph, *kept]
+            if joined_length(candidate) > overlap:
+                break
+            kept = candidate
+        return kept
+
+    chunks: list[Chunk] = []
+    for doc in documents:
+        raw_paragraphs = [part.strip() for part in doc.text.split("\n\n") if part.strip()]
+        paragraphs: list[str] = []
+        headings: list[str] = []
+        for part in raw_paragraphs:
+            if part.startswith("#"):
+                headings.append(part)
+            else:
+                paragraphs.append("\n\n".join([*headings, part]))
+                headings = []
+        # Every shipped guide gives its headings a body paragraph. Retain a
+        # heading-only remainder defensively instead of silently losing text.
+        if headings:
+            paragraphs.append("\n\n".join(headings))
+
+        current: list[str] = []
+        index = 0
+
+        for paragraph in paragraphs:
+            proposed = [*current, paragraph]
+            if current and joined_length(proposed) > chunk_size:
+                chunks.append(
+                    Chunk(
+                        text="\n\n".join(current),
+                        source=doc.source,
+                        index=index,
+                        produced_by="chunker.py::split_documents",
+                    )
+                )
+                index += 1
+                current = trailing_overlap(current)
+
+                # Avoid emitting a duplicate overlap-only chunk. If retaining
+                # it would crowd out this paragraph, start the new chunk cleanly.
+                if current and joined_length([*current, paragraph]) > chunk_size:
+                    current = []
+
+            current.append(paragraph)
+
+        if current:
+            chunks.append(
+                Chunk(
+                    text="\n\n".join(current),
+                    source=doc.source,
+                    index=index,
+                    produced_by="chunker.py::split_documents",
+                )
+            )
+
+    return chunks
 
 
 def describe(chunks: list[Chunk]) -> str:
